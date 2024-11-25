@@ -63,7 +63,7 @@ public final class LambdaUtilities {
          */
         final List<Optional<T>> l = new ArrayList<>(list.size());
         list.forEach(t -> {
-            l.add(Optional.of(t).filter(pre));
+            l.add(Optional.ofNullable(t).filter(pre));
         });
         return l;
     }
@@ -113,8 +113,9 @@ public final class LambdaUtilities {
          *
          * Keep in mind that a map can be iterated through its forEach method
          */
-        map.forEach(null);
-        return null;
+        Map<K, V> m = new HashMap<>();
+        map.forEach((key, value)-> m.put(key, value.orElse(def.get())));
+        return m;
     }
 
     /**
