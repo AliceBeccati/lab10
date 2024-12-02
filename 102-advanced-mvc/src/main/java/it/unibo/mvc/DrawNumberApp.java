@@ -1,15 +1,25 @@
 package it.unibo.mvc;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.JOptionPane;
 
 /**
  */
 public final class DrawNumberApp implements DrawNumberViewObserver {
-    private static final int MIN = 0;
-    private static final int MAX = 100;
-    private static final int ATTEMPTS = 10;
+    private static final String RESOURCE_PATH = "config.yml";
+    // Usa il class loader per ottenere il file come risorsa
+    //InputStream inputStream = DrawNumberApp.class.getClassLoader().getResourceAsStream("config.yml");
+    //private static final int MIN = 0;
+    //private static final int MAX = 100;
+    //private static final int ATTEMPTS = 10;
 
     private final DrawNumber model;
     private final List<DrawNumberView> views;
@@ -18,7 +28,7 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
      * @param views
      *            the views to attach
      */
-    public DrawNumberApp(final DrawNumberView... views) {
+    public DrawNumberApp(final String resourcesFileConfig, final DrawNumberView... views) {
         /*
          * Side-effect proof
          */
@@ -27,7 +37,20 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
             view.setObserver(this);
             view.start();
         }
+        readConfig(resourcesFileConfig);
         this.model = new DrawNumberImpl(MIN, MAX, ATTEMPTS);
+    }
+
+    
+    @Override
+    public void readConfig(final String file) {
+        try (BufferedReader buffer = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
+                    System.out.println(buffer.readLine()); // NOPMD: required by the exercise
+                    
+                } catch (IOException e2) {
+                    //JOptionPane.showMessageDialog(frame, e2, "Error", JOptionPane.ERROR_MESSAGE);
+                    e2.printStackTrace(); // NOPMD: allowed as this is just an exercise
+                }
     }
 
     @Override
@@ -66,7 +89,7 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
      * @throws FileNotFoundException 
      */
     public static void main(final String... args) throws FileNotFoundException {
-        new DrawNumberApp(new DrawNumberViewImpl());
+        new DrawNumberApp(RESOURCE_PATH, new DrawNumberViewImpl());
     }
 
 }

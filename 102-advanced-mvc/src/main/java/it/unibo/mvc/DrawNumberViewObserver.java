@@ -21,4 +21,9 @@ public interface DrawNumberViewObserver {
      * Gracefully quits from the application.
      */
     void quit();
+
+    /**
+     * Read max, min and attempt from file .yml
+     */
+    void readConfig(String file);
 }
