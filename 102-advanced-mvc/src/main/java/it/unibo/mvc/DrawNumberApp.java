@@ -31,7 +31,8 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
         //lettura da file
         final Configuration.Builder config = new Configuration.Builder();
         try (BufferedReader buffer = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(file)))) {
-            String[] s = buffer.readLine().split(": "); // NOPMD: required by the exercise
+            String[] s;
+            s = buffer.readLine().split(": "); // NOPMD: required by the exercise
             config.setMin(Integer.parseInt(s[1]));
             s = buffer.readLine().split(": "); // NOPMD: required by the exercise
             config.setMax(Integer.parseInt(s[1])); 
