@@ -1,5 +1,7 @@
 package it.unibo.mvc;
 
+import java.util.List;
+
 /**
  * Controller interface.
  */
@@ -21,9 +23,4 @@ public interface DrawNumberViewObserver {
      * Gracefully quits from the application.
      */
     void quit();
-
-    /**
-     * Read max, min and attempt from file .yml
-     */
-    void readConfig(String file);
 }
