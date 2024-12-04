@@ -10,8 +10,6 @@ import java.util.List;
 /**
  */
 public final class DrawNumberApp implements DrawNumberViewObserver {
-    // Usa il class loader per ottenere il file come risorsa
-    //InputStream inputStream = DrawNumberApp.class.getClassLoader().getResourceAsStream("config.yml")
     private final DrawNumber model;
     private final List<DrawNumberView> views;
 
@@ -28,23 +26,21 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
             view.setObserver(this);
             view.start();
         }
-        //lettura da file
+        //read file
         final Configuration.Builder config = new Configuration.Builder();
         try (BufferedReader buffer = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(file)))) {
-            String[] s;
-            s = buffer.readLine().split(": "); // NOPMD: required by the exercise
-            config.setMin(Integer.parseInt(s[1]));
-            s = buffer.readLine().split(": "); // NOPMD: required by the exercise
-            config.setMax(Integer.parseInt(s[1])); 
-            s = buffer.readLine().split(": "); // NOPMD: required by the exercise
-            config.setAttempts(Integer.parseInt(s[1]));
-        } catch (IOException e) {
-            System.out.println((e.getMessage()));
-        }catch (NumberFormatException e) {
+            config.setMin(parseLine(buffer));
+            config.setMax(parseLine(buffer));
+            config.setAttempts(parseLine(buffer));
+        } catch (IOException | NumberFormatException e) {
             System.out.println((e.getMessage()));
         }
         this.model = new DrawNumberImpl(config.build());
+    }
 
+    private int parseLine(BufferedReader buffer) throws IOException {
+        String[] parts = buffer.readLine().split(": "); // NOPMD: required by the exercise
+        return Integer.parseInt(parts[1]);
     }
 
     @Override
